@@ -1,4 +1,4 @@
-body {
+﻿body {
     margin: 0;
     font-family: 'Special Elite', monospace;
     background-color: #101010;
@@ -15,17 +15,20 @@ body {
     border-radius: 12px;
     box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
 }
-
+h1, .subtitle {
+    font-family: 'Alata', sans-serif;
+}
 h1 {
-    font-size: 2rem;
+    font-size: 1.75rem;
     text-align: center;
-    margin-bottom: 0.2rem;
+    margin-bottom: 0.5rem;
+    color: #e0e0e0;
 }
 
 .subtitle {
     text-align: center;
     margin-bottom: 2rem;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     color: #bada55;
 }
 
@@ -66,15 +69,18 @@ button {
         color: #000;
     }
 
-.theme-switch {
-    font-size: 0.9rem;
-    color: #ccc;
+.bunker {
+    background-color: #f5f5f5;
+    color: #e0e0e0;
 }
 
-.bunker {
-    background-color: #fefefe;
-    color: #111;
-}
+    .bunker h1 {
+        color: #e0e0e0;
+    }
+
+    .bunker .subtitle {
+        color: #e0e0e0;
+    }
 
     .bunker .console {
         background: #ddd;
@@ -87,22 +93,11 @@ button {
         color: #333;
         border: 1px solid #555;
     }
-.console .line {
-    display: block;
-    overflow: hidden;
-    white-space: nowrap;
+
+/* Typing animation and blinking caret */
+.console .line.typing {
     border-right: 2px solid #00ff88;
-    animation: typing 1s steps(30, end), blink-caret 0.75s step-end infinite;
-}
-
-@keyframes typing {
-    from {
-        width: 0
-    }
-
-    to {
-        width: 100%
-    }
+    animation: blink-caret 0.75s step-end infinite;
 }
 
 @keyframes blink-caret {
@@ -113,4 +108,61 @@ button {
     50% {
         border-color: #00ff88;
     }
+}
+
+/* Theme toggle icon */
+.theme-toggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    font-size: 2.2rem;
+    cursor: pointer;
+    z-index: 1000;
+    user-select: none;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+    .theme-toggle:hover {
+        transform: scale(1.15);
+    }
+
+.bunker .theme-toggle {
+    color: #000;
+}
+.info-section {
+    margin-top: 2rem;
+    font-family: 'Alata', sans-serif;
+}
+
+.info-toggle {
+    background: none;
+    border: 1px solid #888;
+    color: inherit;
+    font-family: 'Alata', sans-serif;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background 0.3s ease;
+}
+
+    .info-toggle:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+.info-content {
+    display: none;
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px solid #444;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.05);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.bunker .info-content {
+    background-color: #eee;
+    color: #111;
+    border-color: #bbb;
 }

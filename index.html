@@ -1,26 +1,57 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Lincolnshire Poacher Web Emulator</title>
+    <title>Lincolnshire Poacher Emulator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Alata&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
 </head>
 <body>
+
+    <!-- 🌙/☀️ Theme Toggle Icon -->
+    <div id="themeToggleIcon" class="theme-toggle" title="Toggle Light/Dark Mode">🌙</div>
+
     <div class="container">
-        <h1>The Lincolnshire Poacher</h1>
-        <p class="subtitle">E03 Numbers Station Web Emulator</p>
+        <h1>E03 Number Station Emulator</h1>
+        <p class="subtitle">aka The Lincolnshire Poacher</p>
+
         <div id="console" class="console"></div>
-        <div class="controls">
-            <button id="startBtn">Start Transmission</button>
-            <button id="stopBtn" disabled>Stop Transmission</button>
-            <button id="downloadLog" disabled>Download Message Log</button>
-            <label class="theme-switch">
-                <input type="checkbox" id="themeToggle"> Toggle Bunker Theme
-            </label>
+        <div id="mainControls" class="controls" style="display: none;">
+            <button id="stopBtn">Stop Transmission</button>
+        </div>
+        <div class="info-section">
+            <button class="info-toggle">More Information about E03</button>
+            <div class="info-content" id="e03Info">
+                <p><strong>Welcome to the E03 - The Lincolnshire Poacher Emulator</strong></p>
+                <p>
+                    "When I was bound apprentice in famous Lincolnshire,<br />
+                    I serv'd my master truly, for nearly seven odd year,<br />
+                    Till I took up to poaching, as you shall quickly hear.<br />
+                    Oh, 'tis my delight on a shining night, in the season of the year."
+                </p>
+                <p><strong>IMPORTANT WARNING:</strong> This emulator is for educational and entertainment purposes only. Never broadcast this emulator using any medium including radio frequencies, telegraphy, or similar and it can't be used as a means of encryption.</p>
+                <p>
+                    E03 was a numbers station and was so named after the 2 bar tune taken from an old folk song called
+                    <em>'The Lincolnshire Poacher'</em> — which was played as an interval (or tuning) signal before the main broadcast.
+                </p>
+                <p>
+                    Much and little is known about number stations, as no government has acknowledged their existence or operation.
+                    What we think we know about E03 is that at one time it broadcasted from RAF Akrotiri in Cyprus and stopped
+                    transmissions around July 2008. E03 also had a sister station in the southern hemisphere, E03a, which used the folk
+                    song <em>'Cherry Ripe'</em> as its interval signal and was last reported in December 2009.
+                </p>
+                <p>
+                    This emulator was created as a bit of fun to cast light on the mysterious world of Number Stations.<br />
+                    More information about numbers stations can be found at <a href="https://priyom.org" target="_blank">priyom.org</a>.<br />
+                    Audio extracted from recordings from The Conet Project:
+                    <a href="https://soundcloud.com/the-conet-project/sets/the-conet-project" target="_blank">The Conet Project on SoundCloud</a>.
+                </p>
+                <p><em>We hope you enjoy this emulator!</em></p>
+            </div>
         </div>
     </div>
+
     <audio id="static" src="audio/radio_static.wav" loop></audio>
     <script src="script.js"></script>
 </body>

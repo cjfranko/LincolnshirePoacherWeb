@@ -1,24 +1,23 @@
-const staticAudio = document.getElementById("static");
-const startBtn = document.getElementById("startBtn");
+﻿const staticAudio = document.getElementById("static");
 const stopBtn = document.getElementById("stopBtn");
 const consoleOutput = document.getElementById("console");
-const downloadBtn = document.getElementById("downloadLog");
-const themeToggle = document.getElementById("themeToggle");
+const themeToggleIcon = document.getElementById("themeToggleIcon");
 
 let messageLog = "";
 let shouldStop = false;
+let transmissionStarted = false;
+let staticStarted = false;
+let transmitterPoweredOn = false;
 
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 const audioBuffers = { digits: {}, lifted: {}, ding: null, dong: null, tune: null };
 
-// Load WAV into audio buffer
 async function loadAudioBuffer(url) {
   const response = await fetch(url);
   const arrayBuffer = await response.arrayBuffer();
   return await audioContext.decodeAudioData(arrayBuffer);
 }
 
-// Preload all sounds into buffers
 async function preloadSounds() {
   for (let i = 0; i <= 9; i++) {
     audioBuffers.digits[i] = await loadAudioBuffer(`audio/${i}.wav`);
@@ -28,17 +27,6 @@ async function preloadSounds() {
   audioBuffers.dong = await loadAudioBuffer("audio/dong.wav");
   audioBuffers.tune = await loadAudioBuffer("audio/tune.wav");
 }
-
-function log(line) {
-  const newLine = document.createElement("div");
-  newLine.className = "line";
-  newLine.textContent = line;
-  consoleOutput.appendChild(newLine);
-  consoleOutput.scrollTop = consoleOutput.scrollHeight;
-
-  messageLog += line + "\n";
-}
-
 
 function wait(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -50,15 +38,15 @@ function playBuffer(buffer, delay = 0) {
     source.buffer = buffer;
     source.connect(audioContext.destination);
     source.start();
-    const totalTime = (buffer.duration * 1000) + delay;
-    setTimeout(resolve, totalTime);
+    setTimeout(resolve, (buffer.duration * 1000) + delay);
   });
 }
 
 function fadeAudio(audio, type = 'in', duration = 3000) {
   let vol = type === 'in' ? 0 : 1;
   audio.volume = vol;
-  audio.play();
+
+  if (type === 'in') audio.play();
 
   const step = 50;
   const interval = setInterval(() => {
@@ -104,46 +92,79 @@ async function playTune(times = 12) {
   }
 }
 
-function downloadTextFile(filename, content) {
-  const blob = new Blob([content], { type: 'text/plain' });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = filename;
-  a.click();
+let logQueue = Promise.resolve();
+
+function log(text) {
+  logQueue = logQueue.then(() => typeLine(text));
 }
 
-themeToggle.addEventListener('change', () => {
-  document.body.classList.toggle("bunker", themeToggle.checked);
+async function typeLine(text) {
+  const lines = text.split(/\r?\n/);
+  for (const line of lines) {
+    const previousCaret = document.querySelector(".line.typing");
+    if (previousCaret) {
+      previousCaret.classList.remove("typing");
+      previousCaret.style.borderRight = "none";
+    }
+
+    const newLine = document.createElement("div");
+    newLine.className = "line typing";
+    newLine.textContent = "";
+    consoleOutput.appendChild(newLine);
+    consoleOutput.scrollTop = consoleOutput.scrollHeight;
+
+    messageLog += line + "\n";
+
+    for (let i = 0; i < line.length; i++) {
+      newLine.textContent += line[i];
+      await wait(20);
+    }
+
+    await wait(250);
+    newLine.classList.remove("typing");
+    newLine.style.borderRight = "none";
+  }
+}
+
+function showIdleCursor() {
+  const cursor = document.createElement("div");
+  cursor.className = "line typing";
+  cursor.textContent = "> Press Enter to Start Transmission";
+  consoleOutput.appendChild(cursor);
+  consoleOutput.scrollTop = consoleOutput.scrollHeight;
+}
+
+// 🌙 / ☀️ Theme toggle icon logic
+themeToggleIcon.addEventListener("click", () => {
+  const isBunker = document.body.classList.toggle("bunker");
+  themeToggleIcon.textContent = isBunker ? "☀️" : "🌙";
 });
 
+// Stop button remains visible and works
 stopBtn.addEventListener("click", () => {
   shouldStop = true;
   stopBtn.disabled = true;
-  startBtn.disabled = false;
   fadeAudio(staticAudio, 'out', 2000);
   log(">>> Transmission Aborted");
 });
 
-startBtn.addEventListener("click", async () => {
-  shouldStop = false;
-  startBtn.disabled = true;
+async function startTransmission() {
+  if (transmissionStarted) return;
+  transmissionStarted = true;
+
   stopBtn.disabled = false;
-  downloadBtn.disabled = true;
   await audioContext.resume();
+  await preloadSounds();
 
   log(">>> Lincolnshire Poacher Transmission Initiated");
   log(">>> WARNING: This emulator is for educational and entertainment purposes only.");
   await wait(2000);
 
-  fadeAudio(staticAudio, 'in', 3000);
-  await wait(3000);
-  await preloadSounds();
-
   const agentId = generateGroup();
   const message = Array.from({ length: 200 }, () => generateGroup());
 
-  log(`AGENT ID: ${agentId.join(" ")}`);
   await playTune(12);
+  log(`AGENT ID: ${agentId.join(" ")}`);
 
   for (let i = 0; i < 10 && !shouldStop; i++) {
     log(`Agent ID Repeat ${i + 1}/10`);
@@ -167,10 +188,58 @@ startBtn.addEventListener("click", async () => {
 
   fadeAudio(staticAudio, 'out', 3000);
   stopBtn.disabled = true;
-  startBtn.disabled = false;
-  downloadBtn.disabled = false;
+}
 
-  downloadBtn.addEventListener("click", () => {
-    downloadTextFile("lincolnshire_poacher_log.txt", messageLog);
+window.addEventListener("DOMContentLoaded", async () => {
+  await wait(1000);
+  await log("control login:");
+  await wait(1000);
+
+  const userId = "user" + Math.floor(Math.random() * 9000 + 1000);
+  await log("> " + userId);
+  await wait(500);
+
+  const password = "*".repeat(8 + Math.floor(Math.random() * 4));
+  await log("> " + password);
+  await wait(700);
+
+  await log("> ...");
+  await wait(800);
+
+  await log("Access Granted.");
+  await wait(1000);
+
+  await log("Press Enter to Turn on Transmitter");
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    const cursor = document.querySelector(".line.typing");
+    if (cursor) cursor.remove();
+
+    if (!transmitterPoweredOn) {
+      transmitterPoweredOn = true;
+      handleTransmitterInit();
+    } else if (!transmissionStarted) {
+      startTransmission();
+    }
+  }
+});
+
+async function handleTransmitterInit() {
+  await log("Transmitter Initialising...");
+  fadeAudio(staticAudio, 'in', 3000);
+  await wait(5000);
+  document.getElementById("mainControls").style.display = "flex";
+  await log("Ready.");
+  showIdleCursor();
+}
+// Toggle info dropdown
+document.addEventListener("DOMContentLoaded", () => {
+  const infoToggle = document.querySelector(".info-toggle");
+  const infoContent = document.getElementById("e03Info");
+
+  infoToggle.addEventListener("click", () => {
+    infoContent.style.display = infoContent.style.display === "block" ? "none" : "block";
   });
 });
