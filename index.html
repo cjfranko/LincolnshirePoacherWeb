@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Lincolnshire Poacher Web Emulator</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>The Lincolnshire Poacher</h1>
+        <p class="subtitle">E03 Numbers Station Web Emulator</p>
+        <div id="console" class="console"></div>
+        <div class="controls">
+            <button id="startBtn">Start Transmission</button>
+            <button id="stopBtn" disabled>Stop Transmission</button>
+            <button id="downloadLog" disabled>Download Message Log</button>
+            <label class="theme-switch">
+                <input type="checkbox" id="themeToggle"> Toggle Bunker Theme
+            </label>
+        </div>
+    </div>
+    <audio id="static" src="audio/radio_static.wav" loop></audio>
+    <script src="script.js"></script>
+</body>
+</html>
