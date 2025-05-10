@@ -168,5 +168,24 @@ button {
 }
 .visitor-counter {
     text-align: center;
-    margin-top: 2rem;
+    margin-top: 3rem;
+    font-size: 0.9rem;
+    color: #888;
 }
+    .visitor-counter .credit {
+        font-family: 'Alata', sans-serif;
+        margin-top: 0.5rem;
+        font-size: 0.85rem;
+        color: #aaa;
+    }
+
+        .visitor-counter .credit a {
+            font-family: 'Alata', sans-serif;
+            color: #aaa;
+            text-decoration: none;
+        }
+
+            .visitor-counter .credit a:hover {
+                font-family: 'Alata', sans-serif;
+                text-decoration: underline;
+            }
