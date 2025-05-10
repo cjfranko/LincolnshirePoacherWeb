@@ -166,3 +166,7 @@ button {
     color: #111;
     border-color: #bbb;
 }
+.visitor-counter {
+    text-align: center;
+    margin-top: 2rem;
+}
