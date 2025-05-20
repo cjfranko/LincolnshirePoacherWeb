@@ -4,8 +4,31 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lincolnshire Poacher Emulator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Alata&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alata&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
+    <style>
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 20px;
+        }
+
+            .controls button {
+                font-size: 1rem;
+                padding: 10px 20px;
+                background-color: #333;
+                color: #fff;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                transition: background 0.3s;
+            }
+
+                .controls button:hover {
+                    background-color: #555;
+                }
+    </style>
 </head>
 <body>
 
@@ -17,9 +40,17 @@
         <p class="subtitle">aka The Lincolnshire Poacher</p>
 
         <div id="console" class="console"></div>
+
+        <!-- ✅ Always-visible Enter button -->
+        <div id="enterControls" class="controls">
+            <button id="startBtn">Enter</button>
+        </div>
+
+        <!-- ✅ Hidden until transmitter is active -->
         <div id="mainControls" class="controls" style="display: none;">
             <button id="stopBtn">Stop Transmission</button>
         </div>
+
         <div class="info-section">
             <button class="info-toggle">More Information about E03</button>
             <div class="info-content" id="e03Info">
@@ -53,6 +84,7 @@
             </div>
         </div>
     </div>
+
     <div class="visitor-counter">
         <a href="https://www.free-counters.org/">free Counters on Free-Counters.org</a><br />
         <script type="text/javascript" src="https://www.freevisitorcounters.com/auth.php?id=de66d91c503fd80e888fc4e1a67be163ea12c0cc"></script>
@@ -61,7 +93,31 @@
             🛠️ Built by <a href="https://github.com/cjfranko/LincolnshirePoacherWeb" target="_blank">Chris Frankland-Wright</a>
         </p>
     </div>
+
     <audio id="static" src="audio/radio_static.wav" loop></audio>
     <script src="script.js"></script>
+    <script>
+    // Touch-friendly Enter button logic
+    document.addEventListener("DOMContentLoaded", () => {
+      const startBtn = document.getElementById("startBtn");
+
+      startBtn.addEventListener("click", () => {
+        const cursor = document.querySelector(".line.typing");
+        if (cursor) cursor.remove();
+
+        if (typeof transmitterPoweredOn === "undefined" || typeof transmissionStarted === "undefined") {
+          console.warn("Transmission state not ready. Try again in a moment.");
+          return;
+        }
+
+        if (!transmitterPoweredOn) {
+          transmitterPoweredOn = true;
+          handleTransmitterInit();
+        } else if (!transmissionStarted) {
+          startTransmission();
+        }
+      });
+    });
+    </script>
 </body>
 </html>
